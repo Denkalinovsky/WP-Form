@@ -41,13 +41,12 @@ const formSubmit = (Form, Fields, postData) => {
 			type: 'POST', // тип запроса
 			success: function (data) {
 				// console.log(data);
-				if (data) {
-					alert("Добавлено");
-				}
-				else {
-					alert("Запись не добавлена");
-				}
+				alert(data.data);
+
 			},
+			error: function (data) {
+				alert(data.data);
+			}
 		});
 	}
 }
