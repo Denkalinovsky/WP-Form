@@ -40,6 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	// console.log(document.getElementById('captcha-value-label'));
 	// console.log(`${a} + ${b} =`);
 	document.getElementById('captcha-value-label').textContent = `${a} + ${b} = ?`;
+	$(thisForm).find('[name = "error-msg"]')[0].style.display = "none";
 });
 
 /**
