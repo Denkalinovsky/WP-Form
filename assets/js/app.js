@@ -1,10 +1,25 @@
 $ = jQuery;
+let a = getRandomInt(1, 10);
+let b = getRandomInt(1, 10);
+var isCapcha = false;
 $(() => {
 	$('form').on(
 		'submit',
 		e => {
 			e.preventDefault();
 			let thisForm = $(e.currentTarget);
+			//lable ошибки -> display: none;
+			$(thisForm).find('[name = "error-msg"]')[0].style.display = "none";
+
+			//проверка на капчу
+			isCapcha = captchaСheck(a, b, parseInt($(thisForm).find('[name = "captcha-input"]').val()));
+			if (!isCapcha) {
+				// если ошибка, то меняю a и b, удаляю все что было в input
+				$(thisForm).find('[name = "error-msg"]')[0].style.display = "block";
+				newCaptcha();
+				return;
+			};
+
 			let submitData = {
 				"action": 'post_message',
 				"user_login": $(thisForm).find('[name = "user_login"]').val(),
@@ -13,19 +28,48 @@ $(() => {
 				"text": $(thisForm).find('[name = "text"]').val()
 			}
 
-			// console.log(_ajax.nonce);
 			formSubmit(thisForm, Fields, submitData);
+			newCaptcha();
+
+			// console.log(_ajax.nonce);
 		}
 	);
 });
 
-
+document.addEventListener("DOMContentLoaded", function () {
+	// console.log(document.getElementById('captcha-value-label'));
+	// console.log(`${a} + ${b} =`);
+	document.getElementById('captcha-value-label').textContent = `${a} + ${b} = ?`;
+});
 
 /**
  * 
  * Functions.
  * 
  */
+
+// Получем новые a,b, чистим input, и меняем textContent
+function newCaptcha() {
+	a = getRandomInt(1, 10);
+	b = getRandomInt(1, 10);
+	document.getElementById('captcha-value-label').textContent = `${a} + ${b} = ?`;
+	document.getElementById('captcha-input').value = '';
+}
+
+// выбор случайных int чисел
+function getRandomInt(min, max) {
+	min = Math.ceil(min);
+	max = Math.floor(max);
+	return Math.floor(Math.random() * (max - min + 1)) + min; //Максимум и минимум включаются
+}
+
+function captchaСheck(a, b, input) {
+	if ((a + b) == input) {
+		return true;
+	}
+	return false;
+}
+
 const formSubmit = (Form, Fields, postData) => {
 
 	let formErrors = validateData(Form, Fields);
@@ -49,6 +93,13 @@ const formSubmit = (Form, Fields, postData) => {
 			}
 		});
 	}
+}
+
+const validateCaptcha = (Value, Input_value) => {
+	if (Value == Input_value) {
+		return true;
+	}
+	return false;
 }
 
 const validateData = (Form, Fields) => {
