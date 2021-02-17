@@ -50,26 +50,14 @@ function post_message() {
       }
 
    } elseif(!$get_user_by_login&&$get_user_by_email){
-      // если нет логина, но есть email, возьмем пользователя по email(ID) и создадим пост
+      // если логина такого нет, то вывести что емеил используется
       $post_data['post_author'] = $get_user_by_email -> ID;
-      $post_id = wp_insert_post( $post_data );
-      if ( get_post_status ( $post_id ) ) {
-         wp_send_json_success("obg(Email)->ID.\nEmail: ".$data['user_email']." \nUsername: ".$get_user_by_email->user_login."\nPost created, ID: ".$post_id);
-      }
-      else {
-         wp_send_json_error("obg(Email)->ID.\nEmail: ".$data['user_email']." \nUsername: ".$get_user_by_email->user_login."\nPost not created.");
-      }
+      wp_send_json_error("Email: ".$data['user_email']." is already in use.\nPost not created.");
       
    }elseif($get_user_by_login&&!$get_user_by_email){
-      // если есть логин, но нет email, возьмем пользователя по userlogin(ID) и создадим пост
+      // если емейла нет, то вывести что юзернейм используется
       $post_data['post_author'] = $get_user_by_login -> ID;
-      $post_id = wp_insert_post( $post_data );
-      if ( get_post_status ( $post_id ) ) {
-         wp_send_json_success("obg(Username)->ID.\nEmail: ".$get_user_by_login->user_email." \nUsername: ".$data['user_login']."\nPost created, ID: ".$post_id);
-      }
-      else {
-         wp_send_json_error("obg(Username)->ID.\nEmail: ".$get_user_by_login->user_email." \nUsername: ".$data['user_login']."\nPost not created.");
-      }
+      wp_send_json_error("Username: ".$data['user_login']." is already in use.\nPost not created.");
    } else{ // есть и логин и мыло
       
       // сравнение айди объектов, если вдруг логин уже зарегистрирован на один Email, а введенный Email зарегистрирован на другой логин
