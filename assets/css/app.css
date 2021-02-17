@@ -112,3 +112,25 @@ button {
 	font-size: 24px;
 	color: #707981;
 }
+
+.capthca-value-wrapper {
+	background: #d0d3d6;
+	border: 2px solid #e0d6d1;
+	padding: 10px;
+	max-width: 100px;
+	/* border-radius: 30px; */
+	margin-bottom: 10px;
+	color: white;
+	font-weight: normal;
+	font-size: 18px;
+	text-align: center;
+}
+
+.capthca-value-wrapper span {
+	color: black;
+}
+
+#error-msg {
+	display: none;
+	color: red;
+}
