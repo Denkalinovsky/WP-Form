@@ -53,6 +53,11 @@
         <input type="email" name="user_email" placeholder="Email">
         <input type="text" name="title" placeholder="Title">
         <textarea name="text" placeholder="Сообщение..." rows="3"></textarea>
+        <div class="capthca-value-wrapper">
+            <span type="text "name="captcha-value" id="captcha-value-label" ></span>
+        </div>
+        <input type="text" name="captcha-input" id="captcha-input" placeholder="Enter captcha...">
+        <label name="error-msg" id="error-msg">Капча введена неверно</label>
         <button type="submit">Отправить</button>
     </div>
 </form>
