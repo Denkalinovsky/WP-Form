@@ -56,7 +56,7 @@
         <div class="capthca-value-wrapper">
             <span type="text "name="captcha-value" id="captcha-value-label" ></span>
         </div>
-        <input type="text" name="captcha-input" id="captcha-input" placeholder="Enter captcha...">
+        <input type="text" name="captcha-input" id="captcha-input" placeholder="Введите капчу...">
         <label name="error-msg" id="error-msg">Капча введена неверно</label>
         <button type="submit">Отправить</button>
     </div>
