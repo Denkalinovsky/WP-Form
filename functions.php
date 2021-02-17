@@ -19,23 +19,23 @@ function myajax_data(){
 }
 
 function post_message() {
-	$perem = $_POST;
+	$data = $_POST;
    
    $post_data = array(
-      'post_title'    => sanitize_text_field( $perem['title'] ),
-      'post_content'  => $perem['text'],
+      'post_title'    => sanitize_text_field( $data['title'] ),
+      'post_content'  => $data['text'],
       'post_author'   => null,
       'post_status'   => 'publish'
       );
    
    //получить пользователей по login и email
-   $get_user_by_login = get_user_by( 'login', $perem['user_login'] );
-   $get_user_by_email = get_user_by( 'email', $perem['user_email'] );
+   $get_user_by_login = get_user_by( 'login', $data['user_login'] );
+   $get_user_by_email = get_user_by( 'email', $data['user_email'] );
    
    // знаю, что много лишнего кода, просто для alert нужна разная информация 
    if(!$get_user_by_login&&!$get_user_by_email){
       // регистрирую аккаунт и получаю id пользователя
-      $user_id = register_new_user( $perem['user_login'], $perem['user_email'] );
+      $user_id = register_new_user( $data['user_login'], $data['user_email'] );
       $user = get_user_by("id",$user_id);
       if(!$user){
          wp_send_json_error("user is not registered");
@@ -43,10 +43,10 @@ function post_message() {
       $post_data['post_author'] = $user->ID;
       $post_id = wp_insert_post( $post_data );
       if ( get_post_status ( $post_id ) ) {
-         wp_send_json_success("New user registered-> \nEmail: ".$perem['user_email']." \nUsername: ".$perem['user_login']."\nPost created, ID: ".$post_id);
+         wp_send_json_success("New user registered-> \nEmail: ".$data['user_email']." \nUsername: ".$data['user_login']."\nPost created, ID: ".$post_id);
       }
       else {
-         wp_send_json_error("New user registered-> \nEmail: ".$perem['user_email']." \nUsername: ".$perem['user_login']."\nPost not created.");
+         wp_send_json_error("New user registered-> \nEmail: ".$data['user_email']." \nUsername: ".$data['user_login']."\nPost not created.");
       }
 
    } elseif(!$get_user_by_login&&$get_user_by_email){
@@ -54,10 +54,10 @@ function post_message() {
       $post_data['post_author'] = $get_user_by_email -> ID;
       $post_id = wp_insert_post( $post_data );
       if ( get_post_status ( $post_id ) ) {
-         wp_send_json_success("obg(Email)->ID.\nEmail: ".$perem['user_email']." \nUsername: ".$get_user_by_email->user_login."\nPost created, ID: ".$post_id);
+         wp_send_json_success("obg(Email)->ID.\nEmail: ".$data['user_email']." \nUsername: ".$get_user_by_email->user_login."\nPost created, ID: ".$post_id);
       }
       else {
-         wp_send_json_error("obg(Email)->ID.\nEmail: ".$perem['user_email']." \nUsername: ".$get_user_by_email->user_login."\nPost not created.");
+         wp_send_json_error("obg(Email)->ID.\nEmail: ".$data['user_email']." \nUsername: ".$get_user_by_email->user_login."\nPost not created.");
       }
       
    }elseif($get_user_by_login&&!$get_user_by_email){
@@ -65,10 +65,10 @@ function post_message() {
       $post_data['post_author'] = $get_user_by_login -> ID;
       $post_id = wp_insert_post( $post_data );
       if ( get_post_status ( $post_id ) ) {
-         wp_send_json_success("obg(Username)->ID.\nEmail: ".$get_user_by_login->user_email." \nUsername: ".$perem['user_login']."\nPost created, ID: ".$post_id);
+         wp_send_json_success("obg(Username)->ID.\nEmail: ".$get_user_by_login->user_email." \nUsername: ".$data['user_login']."\nPost created, ID: ".$post_id);
       }
       else {
-         wp_send_json_error("obg(Username)->ID.\nEmail: ".$get_user_by_login->user_email." \nUsername: ".$perem['user_login']."\nPost not created.");
+         wp_send_json_error("obg(Username)->ID.\nEmail: ".$get_user_by_login->user_email." \nUsername: ".$data['user_login']."\nPost not created.");
       }
    } else{ // есть и логин и мыло
       
@@ -77,10 +77,10 @@ function post_message() {
          $post_data['post_author'] = $get_user_by_login->ID;
    	   $post_id = wp_insert_post( $post_data );
          if ( get_post_status ( $post_id ) ) {
-            wp_send_json_success("Email: ".$perem['user_email']." \nUsername: ".$get_user_by_login->user_login."\nPost created, ID: ".$post_id);
+            wp_send_json_success("Email: ".$data['user_email']." \nUsername: ".$get_user_by_login->user_login."\nPost created, ID: ".$post_id);
          }
          else {
-            wp_send_json_success("Email: ".$perem['user_email']." \nUsername: ".$get_user_by_login->user_login."\nPost created, ID: ".$post_id);
+            wp_send_json_success("Email: ".$data['user_email']." \nUsername: ".$get_user_by_login->user_login."\nPost created, ID: ".$post_id);
          }
 
       } else{ //если по username и email получено 2 совершенно разных пользователя
