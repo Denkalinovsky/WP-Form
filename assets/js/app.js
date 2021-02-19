@@ -1,15 +1,13 @@
 $ = jQuery;
-
-let a = getRandomInt(1, 10);
-let b = getRandomInt(1, 10);
-var isCapcha = false;
-
 $(() => {
+  let a = getRandomInt(1, 10);
+  let b = getRandomInt(1, 10);
   $(document).ready(() => {
     let thisForm = $("form");
     $(thisForm).find(
       '[name = "captcha-value"]'
     )[0].textContent = `${a} + ${b} = ?`;
+
   });
 
   $("form").on("submit", (e) => {
@@ -20,15 +18,12 @@ $(() => {
     $(thisForm).find('[name = "error-msg"]')[0].style.display = "none";
 
     //проверка на капчу
-    isCapcha = captchaСheck(
-      a,
-      b,
-      parseInt($(thisForm).find('[name = "captcha-input"]').val())
-    );
-    if (!isCapcha) {
-      // если ошибка, то меняю a и b, удаляю все что было в input
+    if(! (a + b == parseInt($(thisForm).find('[name = "captcha-input"]').val()))) {
       $(thisForm).find('[name = "error-msg"]')[0].style.display = "block";
-      newCaptcha();
+      a = getRandomInt(1, 10);
+      b = getRandomInt(1, 10);
+      $("#captcha-value-label")[0].textContent = `${a} + ${b} = ?`;
+      $("#captcha-input")[0].value = "";
       return;
     }
 
@@ -41,7 +36,11 @@ $(() => {
     };
 
     formSubmit(thisForm, Fields, submitData);
-    newCaptcha();
+
+    a = getRandomInt(1, 10);
+    b = getRandomInt(1, 10);
+    $("#captcha-value-label")[0].textContent = `${a} + ${b} = ?`;
+    $("#captcha-input")[0].value = "";
   });
 });
 
@@ -51,26 +50,11 @@ $(() => {
  *
  */
 
-// Получем новые a,b, чистим input, и меняем textContent
-function newCaptcha() {
-  a = getRandomInt(1, 10);
-  b = getRandomInt(1, 10);
-  $("#captcha-value-label")[0].textContent = `${a} + ${b} = ?`;
-  $("#captcha-input")[0].value = "";
-}
-
 // выбор случайных int чисел
 function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min; //Максимум и минимум включаются
-}
-
-function captchaСheck(a, b, input) {
-  if (a + b == input) {
-    return true;
-  }
-  return false;
 }
 
 const formSubmit = (Form, Fields, postData) => {
