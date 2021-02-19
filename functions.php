@@ -20,6 +20,9 @@ function post_message() {
       'post_author'  => null,
       'post_status'  => 'publish',
    );
+   if( !isset($_POST['title']) && !isset($_POST['text']) && !isset($_POST['user_login']) && !isset($_POST['user_email'])) {
+        return;
+   }
 
    // получить пользователей по login и email
    $get_user_by_login = get_user_by('login', $data['user_login']);
