@@ -2,6 +2,7 @@ $ = jQuery;
 $(() => {
   let a = getRandomInt(1, 10);
   let b = getRandomInt(1, 10);
+
   $(document).ready(() => {
     let thisForm = $("form");
     $(thisForm).find(
@@ -33,6 +34,9 @@ $(() => {
       user_email: $(thisForm).find('[name = "user_email"]').val(),
       title: $(thisForm).find('[name = "title"]').val(),
       text: $(thisForm).find('[name = "text"]').val(),
+      a_random_int: a,
+      b_random_int: b,
+      user_input_captcha: $(thisForm).find('[name = "captcha-input"]').val(),
     };
 
     formSubmit(thisForm, Fields, submitData);
@@ -64,7 +68,7 @@ const formSubmit = (Form, Fields, postData) => {
     alert(parseErrors(formErrors));
   } else {
     $.ajax({
-      url: _ajax.url, // обработчик
+      url: MyCustomAjax.ajaxurl, // обработчик
       action: "post_message",
       data: postData, // данные
       dataType: "JSON",
@@ -80,12 +84,6 @@ const formSubmit = (Form, Fields, postData) => {
   }
 };
 
-const validateCaptcha = (Value, Input_value) => {
-  if (Value == Input_value) {
-    return true;
-  }
-  return false;
-};
 
 const validateData = (Form, Fields) => {
   let errors = [];
